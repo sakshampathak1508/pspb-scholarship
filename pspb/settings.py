@@ -90,7 +90,7 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'sakshampathak$pspb-scholarship',
+            'NAME': 'sakshampathak$pspb-db',
             'USER': 'sakshampathak',
             'PASSWORD': 'wakeupneo',
             'HOST': 'sakshampathak.mysql.pythonanywhere-services.com',
