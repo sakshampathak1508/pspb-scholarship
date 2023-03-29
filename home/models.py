@@ -83,7 +83,6 @@ class SportsAchievements(models.Model):
     date_to = models.DateField(blank=True,null=True)
     achievement = models.CharField(max_length=100,blank=True,null=True)
     event_type = models.CharField(max_length=50,choices=EVENT,blank=True,null=True)
-    awards = models.TextField(blank=True,null=True)
     scholar = models.ForeignKey('Scholarship',on_delete=models.CASCADE,related_name='related_ach',blank=True,null=True)
 
     def __str__(self):
