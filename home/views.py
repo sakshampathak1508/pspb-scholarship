@@ -24,7 +24,7 @@ class AllScholarView(APIView):
     def post(self, request):
         print(request.data)
         main_data = request.data['main_data']
-        ach = request.data['achivements'] or None
+        ach = request.data['achivements']
         print(main_data)
         print(ach)
         serializer = ScholarSerializers(data=main_data)
@@ -41,6 +41,7 @@ class AllScholarView(APIView):
 class UploadDocsView(APIView):
     parser_classes = (MultiPartParser, FormParser,)
     def post(self,request):
+        print(request.data)
         docs = OtherDocumentsSerializers(data=request.data)
         if docs.is_valid():
             docs.save()
@@ -50,11 +51,20 @@ class UploadDocsView(APIView):
 class CertificateView(APIView):
     parser_classes = (MultiPartParser, FormParser,)
     def post(self,request):
-        certs = CertificateSerializers(data=request.data)
-        if certs.is_valid():
-            certs.save()
-            return Response({"status" : "certificate created"}, status=status.HTTP_201_CREATED)
-        return Response(certs.errors, status=status.HTTP_400_BAD_REQUEST)
+        print(request.data)
+        sid = request.GET.get('sid',None)
+        if request.FILES:
+            certs = dict((request.FILES).lists()).get('files', None)
+            if certs:
+                for c in certs:
+                    cert_data = {}
+                    cert_data["certificate"] = c
+                    cert_data["scholar"] = sid 
+                    serializer = CertificateSerializers(data=cert_data)
+                    if serializer.is_valid():
+                        serializer.save()
+            return Response({"status" : "certificates created"}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class AllDataTabularFormView(APIView):
      def get(self, request, *args, **kwargs):
@@ -64,13 +74,13 @@ class AllDataTabularFormView(APIView):
         if obj:
             ach_obj = SportsAchievements.objects.filter(scholar=obj)
             cert_obj = SportCertificates.objects.filter(scholar=obj)
-            other_docs = OtherDocuments.objects.filter(scholar=obj)
+            other_docs_obj = OtherDocuments.objects.filter(scholar=obj)
 
             
             obj_ser = ScholarSerializers(obj)
             data['main_data'] = obj_ser.data
 
-            other_docs = OtherDocumentsSerializers(obj)
+            other_docs = OtherDocumentsSerializers(other_docs_obj)
             data['other_docs'] = other_docs.data
 
             ach_ser = AchivementSerializers(ach_obj,many=True)
