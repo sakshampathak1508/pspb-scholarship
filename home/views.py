@@ -1,7 +1,7 @@
 from django.shortcuts import render
 # Create your views here.
 from django.shortcuts import render
-
+import json
 # Create your views here.
 from . models import SportsAchievements,Scholarship,SportCertificates
 from . serializers import (
@@ -34,6 +34,12 @@ from rest_framework import pagination,generics
 #         "pin_code": 122017,
 #         "educational_details": "BA PASS",
 #         "other_achievements": "Winner of IPL",
+#         "photo": "/media/documents/photo/licha.pdf",
+#         "sign": "/media/documents/sign/licha.pdf",
+#         "birth_certificate": "/media/documents/birth-cert/licha.pdf",
+#         "aadhar": "/media/documents/aadhar/licha.pdf",
+#         "pan": "/media/documents/pan/licha.pdf",
+#         "passport": "/media/documents/passport/licha.pdf",
 #         "place": "New Delhi",
 #         "date": "2023-03-28"
 #     },
@@ -58,13 +64,6 @@ from rest_framework import pagination,generics
 #     "certificates" : []
 # }
 
-# "photo": "/media/documents/photo/licha.pdf",
-# "sign": "/media/documents/sign/licha.pdf",
-# "birth_certificate": "/media/documents/birth-cert/licha.pdf",
-# "aadhar": "/media/documents/aadhar/licha.pdf",
-# "pan": "/media/documents/pan/licha.pdf",
-# "passport": "/media/documents/passport/licha.pdf",
-
 # "certificates": [
     #     {
     #         "id": 1,
@@ -81,25 +80,29 @@ from rest_framework import pagination,generics
 
 
 class AllScholarView(APIView):
-    parser_classes = (MultiPartParser, FormParser, )
+    # parser_classes = (MultiPartParser, FormParser,)
     def get(self, request,*args, **kwargs):
         obj = Scholarship.objects.all()
         ser = ScholarSerializers(obj,many=True)
         return Response(ser.data)
     
-    def post(self, request, format=None):
-        data = request.data
-        # data = test_data
-        main_data = data['main_data']
+    def post(self, request):
+        print(request.data)
+        main_data = request.data['main_data']
+        ach = request.data['achivements']
+        cert = request.data['certificates']
+        print(main_data)
+        print(ach)
+        print(cert)
         serializer = ScholarSerializers(data=main_data)
         if serializer.is_valid():
             obj = serializer.save()
-            for i in data['achivements']:
+            for i in ach:
                 i['scholar'] = obj.id
                 ach_obj = AchivementSerializers(data=i)
                 if ach_obj.is_valid():
                     ach_obj.save()
-            for i in data['certificates']:
+            for i in cert:
                 certs = dict((request.FILES).lists()).get('certificate', None)
                 for c in certs:
                     cert_data = {}
