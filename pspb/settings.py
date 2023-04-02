@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-_25teotfu!=0rfra(y*i%=_9h+n%t#5kug0ibgkw=xis+)^*ex'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -79,23 +79,23 @@ WSGI_APPLICATION = 'pspb.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-if DEBUG:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
+# if DEBUG:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.sqlite3',
+#             'NAME': BASE_DIR / 'db.sqlite3',
+#         }
+#     }
+# else:
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'sakshampathak$pspb-db',
+        'USER': 'sakshampathak',
+        'PASSWORD': 'wakeupneo',
+        'HOST': 'sakshampathak.mysql.pythonanywhere-services.com',
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'sakshampathak$pspb-db',
-            'USER': 'sakshampathak',
-            'PASSWORD': 'wakeupneo',
-            'HOST': 'sakshampathak.mysql.pythonanywhere-services.com',
-        }
-    }
+}
 
 
 # Password validation

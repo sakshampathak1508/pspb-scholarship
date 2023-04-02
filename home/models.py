@@ -95,6 +95,17 @@ class SportCertificates(models.Model):
     def __str__(self):
         return 'sport certificate ' + str(self.id)
 
+class OtherDocuments(models.Model):
+    photo = models.FileField(upload_to='documents/photo',blank=True,null=True)
+    sign = models.FileField(upload_to='documents/sign',blank=True,null=True) 
+    birth_certificate = models.FileField(upload_to='documents/birth-cert',blank=True,null=True) 
+    aadhar = models.FileField(upload_to='documents/aadhar',blank=True,null=True) 
+    pan = models.FileField(upload_to='documents/pan',blank=True,null=True) 
+    passport = models.FileField(upload_to='documents/passport',blank=True,null=True)
+    scholar = models.ForeignKey('Scholarship',on_delete=models.CASCADE,related_name='related_other',blank=True,null=True)
+
+    def __str__(self):
+        return 'other docs ' + str(self.id)
 
 class Scholarship(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True)
@@ -105,28 +116,24 @@ class Scholarship(models.Model):
     is_ews = models.BooleanField(default=False)
     gender = models.CharField(max_length=20,choices=GENDER,blank=True,null=True)
     parent_name = models.CharField(max_length=256,blank=True,null=True)
-    mobile_number = models.BigIntegerField(blank=True,null=True)
-    aadhar_number = models.BigIntegerField(blank=True,null=True)
+    mobile_number = models.CharField(max_length=13,blank=True,null=True)
+    aadhar_number = models.CharField(max_length=20,blank=True,null=True)
     pan_number = models.CharField(max_length=10,blank=True,null=True)
     passport_number = models.CharField(max_length=10,blank=True,null=True)
     address = models.TextField(blank=True,null=True)
     district = models.CharField(max_length=100,blank=True,null=True)
     state = models.CharField(max_length=50,choices=STATE_CHOICES,blank=True,null=True)
-    pin_code = models.BigIntegerField(null=True,blank=True)
+    pin_code = models.CharField(max_length=10,null=True,blank=True)
     educational_details = models.CharField(max_length=20,blank=True,null=True)
-    photo = models.FileField(upload_to='documents/photo',blank=True,null=True)
-    sign = models.FileField(upload_to='documents/sign',blank=True,null=True) 
-    birth_certificate = models.FileField(upload_to='documents/birth-cert',blank=True,null=True) 
-    aadhar = models.FileField(upload_to='documents/aadhar',blank=True,null=True) 
-    pan = models.FileField(upload_to='documents/pan',blank=True,null=True) 
-    passport = models.FileField(upload_to='documents/passport',blank=True,null=True) 
     other_achievements = models.TextField(blank=True,null=True)
     place = models.CharField(max_length=20,blank=True,null=True)
     date = models.DateField(_("Date"), default=date.today)
+    declare = models.BooleanField(default=False)
+    tnc =models.BooleanField(default=False)
 
     class Meta:
         verbose_name = "Scholars"
         verbose_name_plural = "Scholars"
     
     def __str__(self):           
-        return self.name
+        return str(self.id)

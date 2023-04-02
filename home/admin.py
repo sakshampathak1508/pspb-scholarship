@@ -1,5 +1,5 @@
 from django.contrib import admin
-from . models import Scholarship,SportCertificates,SportsAchievements
+from . models import Scholarship,SportCertificates,SportsAchievements, OtherDocuments
 from django.utils.html import format_html
 
 class SportsAchievementsInline(admin.TabularInline):
@@ -8,8 +8,11 @@ class SportsAchievementsInline(admin.TabularInline):
 class SportCertificatesInline(admin.TabularInline):
     model = SportCertificates
 
+class OtherDocsInline(admin.TabularInline):
+    model = OtherDocuments
+
 class ScholarshipAdmin(admin.ModelAdmin):
-    inlines = [SportsAchievementsInline,SportCertificatesInline]
+    inlines = [SportsAchievementsInline,OtherDocsInline,SportCertificatesInline]
     list_display = ('name','sport' ,'category','gender','state','playing_position','view','download')
     search_fields = ('name','sport' ,'category','gender','state','playing_position')
     # list_editable = ('name','sport' ,'category','gender','state','playing_position')
@@ -36,6 +39,15 @@ class SaAdmin(admin.ModelAdmin):
 @admin.register(SportCertificates)
 class ScAdmin(admin.ModelAdmin):
     list_display = ('scholar','certificate')
+    search_fields = ('scholar',)
+    # list_editable = ('name','sport' ,'category','gender','state','playing_position')
+    ordering = ('-scholar',)
+    list_per_page = 25
+    list_filter = ('scholar',)
+
+@admin.register(OtherDocuments)
+class OdAdmin(admin.ModelAdmin):
+    list_display = ('scholar','photo','sign','birth_certificate','aadhar','pan','passport')
     search_fields = ('scholar',)
     # list_editable = ('name','sport' ,'category','gender','state','playing_position')
     ordering = ('-scholar',)
