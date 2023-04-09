@@ -80,7 +80,7 @@ class AllDataTabularFormView(APIView):
             obj_ser = ScholarSerializers(obj)
             data['main_data'] = obj_ser.data
 
-            other_docs = OtherDocumentsSerializers(other_docs_obj)
+            other_docs = OtherDocumentsSerializers(other_docs_obj,many=True)
             data['other_docs'] = other_docs.data
 
             ach_ser = AchivementSerializers(ach_obj,many=True)

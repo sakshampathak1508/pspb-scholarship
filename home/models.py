@@ -85,12 +85,21 @@ class SportsAchievements(models.Model):
     event_type = models.CharField(max_length=50,choices=EVENT,blank=True,null=True)
     scholar = models.ForeignKey('Scholarship',on_delete=models.CASCADE,related_name='related_ach',blank=True,null=True)
 
+    class Meta:
+        verbose_name = 'Sport Achievements'
+        verbose_name_plural = 'Sport Achievements'
+    
     def __str__(self):
         return self.tournament_name
+    
 
 class SportCertificates(models.Model):
     certificate = models.FileField(upload_to='certificates',blank=True,null=True)
     scholar = models.ForeignKey('Scholarship',on_delete=models.CASCADE,related_name='related_cert',blank=True,null=True)
+
+    class Meta:
+        verbose_name = 'Sport Certificates'
+        verbose_name_plural = 'Sport Certificates'
 
     def __str__(self):
         return 'sport certificate ' + str(self.id)
@@ -104,11 +113,16 @@ class OtherDocuments(models.Model):
     passport = models.FileField(upload_to='documents/passport',blank=True,null=True)
     scholar = models.ForeignKey('Scholarship',on_delete=models.CASCADE,related_name='related_other',blank=True,null=True)
 
+    class Meta:
+        verbose_name = 'Other Documents'
+        verbose_name_plural = 'Other Documents'
+
     def __str__(self):
         return 'other docs ' + str(self.id)
 
 class Scholarship(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True)
+    dob = models.DateField(blank=True,null=True)
     sport = models.CharField(max_length=20,choices=SPORT,blank=True,null=True)
     playing_position = models.CharField(max_length=20,choices=POSITION,blank=True,null=True)
     category = models.CharField(max_length=20,choices=CATEGORY,blank=True,null=True)
@@ -136,4 +150,4 @@ class Scholarship(models.Model):
         verbose_name_plural = "Scholars"
     
     def __str__(self):           
-        return str(self.id)
+        return self.name

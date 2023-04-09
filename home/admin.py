@@ -1,17 +1,21 @@
 from django.contrib import admin
 from . models import Scholarship,SportCertificates,SportsAchievements, OtherDocuments
 from django.utils.html import format_html
+from import_export.admin import ExportActionMixin
 
 class SportsAchievementsInline(admin.TabularInline):
     model = SportsAchievements
+    extra = 0
 
 class SportCertificatesInline(admin.TabularInline):
     model = SportCertificates
+    extra = 0
 
 class OtherDocsInline(admin.TabularInline):
     model = OtherDocuments
+    extra = 0
 
-class ScholarshipAdmin(admin.ModelAdmin):
+class ScholarshipAdmin(ExportActionMixin,admin.ModelAdmin):
     inlines = [SportsAchievementsInline,OtherDocsInline,SportCertificatesInline]
     list_display = ('name','sport' ,'category','gender','state','playing_position','view','download')
     search_fields = ('name','sport' ,'category','gender','state','playing_position')
@@ -28,7 +32,7 @@ class ScholarshipAdmin(admin.ModelAdmin):
 admin.site.register(Scholarship,ScholarshipAdmin)
 
 @admin.register(SportsAchievements)
-class SaAdmin(admin.ModelAdmin):
+class SaAdmin(ExportActionMixin,admin.ModelAdmin):
     list_display = ('scholar','tournament_name' ,'venue','date_from','date_to','achievement','event_type',)
     search_fields = ('scholar','tournament_name' ,'venue','date_from','date_to','event_type')
     # list_editable = ('name','sport' ,'category','gender','state','playing_position')
@@ -37,7 +41,7 @@ class SaAdmin(admin.ModelAdmin):
     list_filter = ('scholar','tournament_name' ,'venue','date_from','date_to','event_type')
 
 @admin.register(SportCertificates)
-class ScAdmin(admin.ModelAdmin):
+class ScAdmin(ExportActionMixin,admin.ModelAdmin):
     list_display = ('scholar','certificate')
     search_fields = ('scholar',)
     # list_editable = ('name','sport' ,'category','gender','state','playing_position')
@@ -46,7 +50,7 @@ class ScAdmin(admin.ModelAdmin):
     list_filter = ('scholar',)
 
 @admin.register(OtherDocuments)
-class OdAdmin(admin.ModelAdmin):
+class OdAdmin(ExportActionMixin,admin.ModelAdmin):
     list_display = ('scholar','photo','sign','birth_certificate','aadhar','pan','passport')
     search_fields = ('scholar',)
     # list_editable = ('name','sport' ,'category','gender','state','playing_position')
